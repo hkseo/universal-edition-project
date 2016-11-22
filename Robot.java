@@ -33,6 +33,12 @@ public class Robot {
 		}
 	}
 	
+	public static void look(int deg) {
+		// always start sensor pointing straight forward. The allowed motion is then [-90,90]
+		scaledDeg = ultrasonicGearRatio*deg;
+		Motor.D.rotate(scaledDeg);	
+	}
+	
 	/* 
 	public static void rotate(float s, int l, int r) {
 		// B-> to left C-> to right
