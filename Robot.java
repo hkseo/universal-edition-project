@@ -42,6 +42,7 @@ public class Robot {
 	public static void grab() {
         	float s = 90;
         	float deg = 90;
+		float gearR = 3;
         	dist_goal = 1.5;
         
         	float dist = pollsonic(True);
@@ -50,15 +51,16 @@ public class Robot {
 			Motor.A.forward();
         	}
         	Motor.A.setSpeed(s);
-        	Motor.A.rotate(deg);
+        	Motor.A.rotate(deg*gearR);
     	}
     
     	public static void drop(){
         	float s= 90;
         	float deg = -90;
+		float gearR = 3;
         
         	Motor.A.setSpeed(s);
-        	Motor.A.rotate(deg);
+        	Motor.A.rotate(deg*gearR);
     	}
 	/* 
 	public static void rotate(float s, int l, int r) {
