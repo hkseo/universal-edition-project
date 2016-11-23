@@ -39,6 +39,27 @@ public class Robot {
 		Motor.D.rotate(scaledDeg);	
 	}
 	
+	public static void grab() {
+        	float s = 90;
+        	float deg = 90;
+        	dist_goal = 1.5;
+        
+        	float dist = pollsonic(True);
+        	while dist > dist_goal{
+            		float dist = pollsonic(True);
+			Motor.A.forward();
+        	}
+        	Motor.A.setSpeed(s);
+        	Motor.A.rotate(deg);
+    	}
+    
+    	public static void drop(){
+        	float s= 90;
+        	float deg = -90;
+        
+        	Motor.A.setSpeed(s);
+        	Motor.A.rotate(deg);
+    	}
 	/* 
 	public static void rotate(float s, int l, int r) {
 		// B-> to left C-> to right
