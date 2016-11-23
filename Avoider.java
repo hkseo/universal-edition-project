@@ -1,11 +1,12 @@
 public class Avoider implements Behavior {
   public float tooClose = 10; 
+  
   public Avoider(float tooClose) {
     this.tooClose = tooClose; 
   }
   
   public boolean checkActive() { 
-    return Robot.pollSonic(false) < this.tooClose; 
+    return Robot.sonic < this.tooClose; 
   }
   
   public void act(int direction) {
