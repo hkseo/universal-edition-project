@@ -1,6 +1,7 @@
 import lejos.hardware.Button; 
 
 public class Main {
+	
 	public static void main(String[] args) {
 		Behavior[] behaviours = {
 		  new Avoider(10), // avoider arg is "too close"  
@@ -9,10 +10,12 @@ public class Main {
 
 		System.out.println("STARTING MAIN");
 		Button.waitForAnyPress();
-		Robot.gyro.reset();
+		Robot.gyroReset();
+		Robot.updateState(); 
 		while (Button.ESCAPE.isUp()) {
 			for(int i=0; i<behaviours.length; i++){
-				if(behaviours[i].checkActive()) { 
+				if(behaviours[i].checkActive()) {
+					System.out.println("activating behaviour " + i); 
 					behaviours[i].act(1);
 					break;
 				}
@@ -23,7 +26,7 @@ public class Main {
 			if (Button.UP.isDown()) 
 				System.out.println(Robot.position);
 		}
-		
 		System.out.println(Robot.position); 
 	}
+	
 }

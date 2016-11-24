@@ -18,9 +18,9 @@ class Pathfinder implements Behavior {
 		if (dx*dx+dy*dy < 5) {
 			// close enough. 
 			if (Math.atan2(dy, dx) > 10) 
-				Robot.drive(100,  -100);
+				Robot.drive(200, -200);
 			else if (Math.atan2(dy,  dx) < -10)
-				Robot.drive(-100,  100);
+				Robot.drive(-200, 200);
 			else
 				curWaypoint++; 
 		}
@@ -29,13 +29,14 @@ class Pathfinder implements Behavior {
 			Robot.ticksSinceLastObstacle++;
 			
 			if (Math.atan2(dy, dx) > 0)
-				Robot.drive(100, -100);
+				Robot.drive(200, -200);
 			else
-				Robot.drive(-100, 100);
+				Robot.drive(-200, 200);
 		}
 		else { 
-			// drive forward to clear obstacle 
-			Robot.drive(100, 100);
+			// drive forward to clear obstacle
+			Robot.ticksSinceLastObstacle++; 
+			Robot.drive(200, 200);
 		}
 	}
 }

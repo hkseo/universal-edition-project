@@ -6,9 +6,10 @@ import lejos.hardware.sensor.EV3GyroSensor;
 
 public class Robot {
 	private static float GRIPPER_SPEED = 90f;
-	private static float GRIPPER_GEAR_RATIO = 3f;
+	private static float GRIPPER_GEAR_RATIO = 2f;
 	private static float TURN_SPEED = 90;
 	private static float TURN_WHEEL_RATIO = 3.5f;
+	private static float ULTRASONIC_GEAR_RATIO = 1; 
 
 	private static EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S2);
 	private static EV3UltrasonicSensor sonicSensor = new EV3UltrasonicSensor(SensorPort.S3);
@@ -40,36 +41,37 @@ public class Robot {
 			Motor.C.stop(true);
 		}
 	}
-
+	
+	
 	/* Makes the ultrasonic sensor look in a given direction */
 	public static void look(int deg) {
 		// always start sensor pointing straight forward. The allowed motion is then [-90,90]
-		scaledDeg = ultrasonicGearRatio*deg;
-		Motor.D.rotate(scaledDeg);
+		Motor.D.rotateTo((int) (ULTRASONIC_GEAR_RATIO * deg));
 	}
 
 	/*
 	 * Uses the gripper to grab the object. Note: this function is blocking
 	 * */
 	public static void grab() {
-    	float GRIPPER_CLOSED_POSITION = 90; // angle that gripper should be rotated to
-    	dist_goal = 1.5;
+    	float GRIPPER_CLOSED_POSITION = 45; // angle that gripper should be rotated to
+    	float dist_goal = 1.5f;
 
     	look(0);
-    	float _dist = pollSonic(false); // from here
-    	while (_dist > dist_goal) {
-    		float _dist = pollSonic(false);
-    		Motor.A.forward();
-    	} // to here should be removed
+    	//float _dist = pollSonic(false); // from here
+    	//while (_dist > dist_goal) {
+    	//	_dist = pollSonic(false);
+    	//	Motor.C.forward();
+    	//	Motor.B.forward();
+    	//} // to here should be removed
     	Motor.A.setSpeed(GRIPPER_SPEED);
-    	Motor.A.rotate(GRIPPER_CLOSED_POSITION * GRIPPER_GEAR_RATIO);
+    	Motor.A.rotateTo((int) (GRIPPER_CLOSED_POSITION * GRIPPER_GEAR_RATIO));
 	}
 
 	public static void drop(){
-    	float GRIPPER_OPEN_POSITION = -90;
+    	float GRIPPER_OPEN_POSITION = -45;
 
     	Motor.A.setSpeed(GRIPPER_SPEED);
-    	Motor.A.rotate(GRIPPER_OPEN_POSITION * GRIPPER_GEAR_RATIO);
+    	Motor.A.rotateTo((int) (GRIPPER_OPEN_POSITION * GRIPPER_GEAR_RATIO));
 	}
 
 	// turn the robot by a specified amount. also blocking because we should never need
@@ -84,6 +86,11 @@ public class Robot {
 		}
 		Robot.stop();
 	}
+	private static void stop() {
+		Motor.B.setSpeed(0); 
+		Motor.C.setSpeed(0); 
+	}
+
 	/*
 	public static void rotate(float s, int l, int r) {
 		// B-> to left C-> to right
@@ -143,11 +150,16 @@ public class Robot {
 		if (log) {
 			System.out.println("gyroSensor: " + sample[0]);
 		}
-		return Math.toRadians(sample[0]);
+		return (float) Math.toRadians(sample[0]);
 	}
+	
+	public static void gyroReset() {
+		gyroSensor.reset(); 
+	}
+	
 	/* Resets the tachometer for the motors. make sure you call this when you turn! */
 	public static void tachoReset() {
-		this.lastFixedPosition.increment(dist);
+		lastFixedPosition.increment(dist * Math.cos(Math.toRadians(gyro)), dist * Math.sin(Math.toRadians(gyro)));
 		Motor.B.resetTachoCount();
 		Motor.C.resetTachoCount();
 	}
@@ -159,7 +171,7 @@ public class Robot {
 		color = pollColor(false);
 		sonic = pollSonic(false);
 
-		Robot.position = Robot.lastFixedPosition.add(new Position(dist * Math.cos(gyro), dist * Math.sin(gyro)));
+		Robot.position = Position.add(Robot.lastFixedPosition, new Position(dist * Math.cos(gyro), dist * Math.sin(gyro)));
 		Robot.tachoReset();
 		return Robot.position;
 	}

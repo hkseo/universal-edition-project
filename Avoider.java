@@ -12,8 +12,8 @@ public class Avoider implements Behavior {
   public void act(int direction) {
 	  Robot.ticksSinceLastObstacle = 0; 
 	  if(direction > 0)
-      Robot.drive(100, -100); 
+      Robot.drive(200, -200); 
     else
-      Robot.drive(-100, 100); 
+      Robot.drive(-200, 200); 
   }
 }
