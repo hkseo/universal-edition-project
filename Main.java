@@ -4,8 +4,9 @@ public class Main {
 	
 	public static void main(String[] args) {
 		Behavior[] behaviours = {
-		  new Avoider(30), // avoider arg is "too close"  
-		  new Pathfinder()
+//		  new Avoider(30), // avoider arg is "too close"  
+//		  new Pathfinder(),
+		  new Delivery(-3,0.312f)
 		}; 
 
 		System.out.println("STARTING MAIN");

@@ -21,6 +21,11 @@ public class Robot {
 	public static int ticksSinceLastObstacle = 0;
 
 	public static float color, sonic, gyro, dist;
+	
+	public static float LFintegral, LFderiv, LFlastErr;
+	
+	public static int readyToDeliver = 1;
+	public static int readyToReturn = 0;
 
 	public static void drive(float l, float r) {
 		// B-> to left C-> to right
@@ -86,7 +91,7 @@ public class Robot {
 		}
 		Robot.stop();
 	}
-	private static void stop() {
+	public static void stop() {
 		Motor.B.setSpeed(0); 
 		Motor.C.setSpeed(0); 
 	}
@@ -177,20 +182,18 @@ public class Robot {
 		return Robot.position;
 	}
 	
-
-	
-	public static void lineFollow(v,p,i,d,tar) {
+	public static void lineFollow(float v,int p, int i, int d,float tar) {
 		//v = 250 p = 350 i = 30 d= 500 tar = 0.312
-		float err = tar - this.sonic;
+		float err = tar - Robot.sonic;
 		
-		this.LFintegral *= 0.98; 
-		this.LFintegral += err;
-		this.LFderiv = err - this.LFlastErr; 
-		this.LFlastErr = err;
+		Robot.LFintegral *= 0.98; 
+		Robot.LFintegral += err;
+		Robot.LFderiv = err - Robot.LFlastErr; 
+		Robot.LFlastErr = err;
 		
-		leftSpeed = v + p * err + i * integral + d * deriv; 
-		rightSpeed = v - (p * err + i * integral + d * deriv);
+		float leftSpeed = v + p * err + i * Robot.LFintegral + d * Robot.LFderiv; 
+		float rightSpeed = v - (p * err + i * Robot.LFintegral + d * Robot.LFderiv);
 		
-		this.drive(leftSpeed, rightSpeed);
+		Robot.drive(leftSpeed, rightSpeed);
 	}
 }
