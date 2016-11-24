@@ -4,7 +4,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		Behavior[] behaviours = {
-		  new Avoider(10), // avoider arg is "too close"  
+		  new Avoider(30), // avoider arg is "too close"  
 		  new Pathfinder()
 		}; 
 
@@ -15,13 +15,12 @@ public class Main {
 		while (Button.ESCAPE.isUp()) {
 			for(int i=0; i<behaviours.length; i++){
 				if(behaviours[i].checkActive()) {
-					System.out.println("activating behaviour " + i); 
-					behaviours[i].act(1);
+					behaviours[i].act(-1);
 					break;
 				}
 			}
 			Robot.updateState(); 
-//			System.out.println(Robot.position);
+			// System.out.println(Robot.position);
 			
 			if (Button.UP.isDown()) 
 				System.out.println(Robot.position);

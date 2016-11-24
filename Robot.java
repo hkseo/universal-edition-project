@@ -1,3 +1,4 @@
+import lejos.hardware.Button;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3ColorSensor;
@@ -41,7 +42,6 @@ public class Robot {
 			Motor.C.stop(true);
 		}
 	}
-	
 	
 	/* Makes the ultrasonic sensor look in a given direction */
 	public static void look(int deg) {
@@ -150,7 +150,7 @@ public class Robot {
 		if (log) {
 			System.out.println("gyroSensor: " + sample[0]);
 		}
-		return (float) Math.toRadians(sample[0]);
+		return (float) (sample[0]);
 	}
 	
 	public static void gyroReset() {
@@ -171,8 +171,26 @@ public class Robot {
 		color = pollColor(false);
 		sonic = pollSonic(false);
 
-		Robot.position = Position.add(Robot.lastFixedPosition, new Position(dist * Math.cos(gyro), dist * Math.sin(gyro)));
-		Robot.tachoReset();
+		Robot.position = Position.add(Robot.lastFixedPosition, new Position(
+				dist * Math.cos(Math.toRadians(gyro)), 
+				dist * Math.sin(Math.toRadians(gyro))));
 		return Robot.position;
+	}
+	
+
+	
+	public static void lineFollow(v,p,i,d,tar) {
+		//v = 250 p = 350 i = 30 d= 500 tar = 0.312
+		float err = tar - this.sonic;
+		
+		this.LFintegral *= 0.98; 
+		this.LFintegral += err;
+		this.LFderiv = err - this.LFlastErr; 
+		this.LFlastErr = err;
+		
+		leftSpeed = v + p * err + i * integral + d * deriv; 
+		rightSpeed = v - (p * err + i * integral + d * deriv);
+		
+		this.drive(leftSpeed, rightSpeed);
 	}
 }

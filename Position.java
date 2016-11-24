@@ -21,6 +21,6 @@ public class Position {
 	}
 
 	public String toString() {
-		return "" + this.x + ", " + this.y;
+		return String.format("x %1.2f y %2.2f", this.x,  this.y); 
 	}
 }

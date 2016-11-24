@@ -10,10 +10,11 @@ public class Avoider implements Behavior {
   }
   
   public void act(int direction) {
-	  Robot.ticksSinceLastObstacle = 0; 
+	  Robot.ticksSinceLastObstacle = 0;
+	  Robot.tachoReset();
 	  if(direction > 0)
-      Robot.drive(200, -200); 
-    else
-      Robot.drive(-200, 200); 
+	      Robot.drive(200, -200); 
+	    else
+	      Robot.drive(-200, 200); 
   }
 }
