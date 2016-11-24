@@ -7,6 +7,8 @@ import lejos.hardware.sensor.EV3GyroSensor;
 public class Robot {
 	private static float GRIPPER_SPEED = 90f;
 	private static float GRIPPER_GEAR_RATIO = 3f;
+	private static float TURN_SPEED = 90;
+	private static float TURN_WHEEL_RATIO = 3.5f;
 
 	private static EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S2);
 	private static EV3UltrasonicSensor sonicSensor = new EV3UltrasonicSensor(SensorPort.S3);
@@ -70,8 +72,17 @@ public class Robot {
     	Motor.A.rotate(GRIPPER_OPEN_POSITION * GRIPPER_GEAR_RATIO);
 	}
 
-	public static void turn() {
-		// to be written
+	// turn the robot by a specified amount. also blocking because we should never need
+	// another behaviour while this is going on.
+	public static void turn(float deg) {
+		float startingOrientation = pollGyro(false);
+
+		Motor.B.setSpeed(TURN_SPEED);
+		Motor.C.setSpeed(-TURN_SPEED);
+		while (pollGyro(false) - startingOrientation < deg) {
+			// do nothing
+		}
+		Robot.stop();
 	}
 	/*
 	public static void rotate(float s, int l, int r) {
