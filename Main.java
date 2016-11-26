@@ -4,15 +4,22 @@ public class Main {
 	
 	public static void main(String[] args) {
 		Behavior[] behaviours = {
+			// insert your behavior instantiation here
+			// we should try running combonations of behaviors too at some point to make
+			// sure integration works
 //		  new Avoider(30), // avoider arg is "too close"  
 //		  new Pathfinder(),
-		  new Delivery(-3,0.312f)
+// 		  new Delivery(50,0.312f)
 		}; 
 
 		System.out.println("STARTING MAIN");
 		Button.waitForAnyPress();
 		Robot.gyroReset();
 		Robot.updateState(); 
+		
+		// Code for initial cmd input
+		
+		// Richard might want to put grab pizza here
 		while (Button.ESCAPE.isUp()) {
 			for(int i=0; i<behaviours.length; i++){
 				if(behaviours[i].checkActive()) {
